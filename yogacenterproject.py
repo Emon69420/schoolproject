@@ -1,7 +1,11 @@
 import mysql.connector
 from datetime import datetime
+
+#Cinnects The Project To MySql Backend
 mycon = mysql.connector.connect(host = 'localhost', user = 'root', passwd = 'password', database = 'YOGA')
 cur = mycon.cursor()
+
+#This Function Authenticates The User
 def authen(user, passwo):
     cur.execute('SELECT * FROM USER')
     data = cur.fetchall()
@@ -9,14 +13,19 @@ def authen(user, passwo):
         if (user in row) and (passwo in row):
             i = 1
             while i == 1:
-                
+
+                #Prints The Menu Through Which The User Can Navigate Through The Program
                 print('1) view all the available courses')
                 print('2) start a  new booking')
                 print('3) get help regarding a course')
                 print('4) get user data')
+
+
                 selection = int(input('select an option from above: '))
                 if selection == 1 :
                     cur.execute('select * from exercises')
+
+                    #Prints All The Asanas Present
                     data = cur.fetchall()
                     print( 'SNo., Name Of Asan, Difficulty')
                     for row in data:
@@ -26,6 +35,8 @@ def authen(user, passwo):
                         continue;
                     else:
                         break;
+
+                #Course Selection Option
                 elif selection == 2:
                     print('ID| NAME OF EXERCISE| DIFFICULTY')
                     cur.execute('select * from exercises')
@@ -58,6 +69,8 @@ def authen(user, passwo):
                         continue;
                     else:
                         break;
+
+                #User Query Option
                 elif selection == 3:
                     helpreq = input('Write the content for help required with within 100 words: ')
                     query =  'SELECT ID FROM USER WHERE NAME = %s'
@@ -86,12 +99,15 @@ def authen(user, passwo):
                         continue;
                     else:
                         break;
+
+                #User options menu
                 elif selection == 4:
                     j = 1
                     while j == 1:
                         print('1) update phone nummber')
                         print('2) view all the past bookings')
                         print('3) view all the queries for helpdesk')
+                        print('4) print average difficulty level')
                         selection = int(input(' enter the option to continue with: '))
                         if selection == 1:
                             newNumber= int(input('enter new number: '))
@@ -161,7 +177,7 @@ def authen(user, passwo):
                             for data in value:
                                 (diff,) = data
                                 i = i + diff
-                            print('your difficulty level', (i/rowFetched) )
+                            print('your difficulty level', (i/rowsFetched) )
                             j = int(input("ENTER 1 TO CONTINUE OR ANY OTHER NUMBER TO EXIT"))
                             if  j == 1:
                                 continue;
@@ -173,6 +189,8 @@ def authen(user, passwo):
                                 continue;
                         else:
                                 break;
+
+#This Function Is Used To Create New User Account
 def accCreation(user, passwo, pho):
     query = "INSERT INTO USER(`NAME`, `PHONE`, `PASSWORD`) VALUES(%s, %s, %s)"
     VALUES = (user, pho, passwo)
